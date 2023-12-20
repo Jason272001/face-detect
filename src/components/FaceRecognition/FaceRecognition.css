@@ -1,0 +1,7 @@
+.bounding-box {
+    position: absolute;
+    border: 3px solid #149df2;
+    pointer-events: none;
+    z-index: 2;
+    box-sizing: border-box;
+}
