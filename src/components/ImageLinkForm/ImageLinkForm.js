@@ -3,7 +3,7 @@ import './ImageLinkForm.css';
 const ImageLinkForm = ({ onInputChange,onButtonSubmit }) => {
     
     return (
-        <div >
+        <div style={{ position: 'relative', zIndex: 2 }}>
             <p className="f3">
                 {
                     'This website will detect faces in your pictures.'

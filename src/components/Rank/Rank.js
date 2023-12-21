@@ -3,7 +3,7 @@ import './Rank.css';
 
 const Rank = () => {
     return (
-        <div>
+        <div style={{ position: 'relative', zIndex: 2 }}>
             <div className="white f3">
                 {'Jason your current rank is ...'}
             </div>

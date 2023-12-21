@@ -3,7 +3,7 @@ import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
-import Particles from './components/Particles/Particles';
+import ParticlesC from './components/Particles/Particles';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import React, { Component } from 'react';
 
@@ -102,7 +102,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Particles />
+        <ParticlesC />
         <Navigation />
         <Logo />
         <Rank />
