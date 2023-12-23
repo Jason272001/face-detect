@@ -5,7 +5,10 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import ParticlesC from './components/Particles/Particles';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Signin from './components/Signin/Signin';
+import Signup from './components/Signup/Signup';
 import React, { Component } from 'react';
+
 
 const PAT = '676a8b7f09fd40dd9ab16dc639b32ee1';
  const USER_ID = 'k98s7l8byogf';
@@ -20,7 +23,9 @@ class App extends Component {
     this.state = {
       input: '', 
       imageUrl: '',  
-      box:{}
+      box: {},
+      route: 'signin',
+      IsSignIn:false
     }
   }
   displayFaceBox = (box) => {
@@ -86,9 +91,6 @@ class App extends Component {
         body: raw
     };
 
-    // NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
-    // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
-    // this will default to the latest version_id
 
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
       .then(response => response.json())
@@ -98,18 +100,44 @@ class App extends Component {
   
 
   }
+  onRouteChange = (data) => {
+    if (data === 'signout') {
+      this.setState({ IsSignIn: false })
+    }
+    else if (data === 'home') {
+      this.setState({IsSignIn:true})
+      
+    }
+
+
+
+    this.setState({route: data});
+  }
 
   render() {
     return (
       <div className="App">
+
         <ParticlesC />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange}
-          onButtonSubmit={this.onButtonSubmit} />
-        <FaceRecognition box={this.state.box} imageUrl={ this.state.imageUrl} />
+                <Navigation IsSignIn={this.state.IsSignIn} onRouteChange={this.onRouteChange} /> 
+        {this.state.route === 'home'
+          ?
+          (<div>
+          
+          <Logo />
+          <Rank />
+          <ImageLinkForm
+            onInputChange={this.onInputChange}
+            onButtonSubmit={this.onButtonSubmit} />
+          < FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+          </div>)
+          : (
+            this.state.route==='signin'?
+       
+              (<Signin onRouteChange={this.onRouteChange} />)
+              :(<Signup onRouteChange={this.onRouteChange}/>)
+               )
+           }
       </div>
     );
   }

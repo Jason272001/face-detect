@@ -1,0 +1,22 @@
+
+@media only screen and (min-width: 680px) {
+   
+
+    .margin{
+        margin-top: -120px;
+
+    }
+        .text1 {
+            font-size: 30px;
+        }
+
+        .text2{
+            font-size: 30px;
+        }
+        .btn{
+            font-size: 30px;
+        }
+
+}
+
+
