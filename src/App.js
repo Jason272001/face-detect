@@ -16,18 +16,38 @@ const APP_ID = 'faceDetect';
 const MODEL_ID = 'face-detection';
  const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105';
 
-
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      input: '', 
+const initialstate = {
+   input: '', 
       imageUrl: '',  
       box: {},
       route: 'signin',
-      IsSignIn:false
-    }
+      IsSignIn: false,
+      user: {
+            id: '',
+            name: '',
+            email: '',
+            entries: 0,
+            joined:''
+      }
+}
+class App extends Component {
+  constructor() {
+    super();
+    this.state = initialstate;
   }
+
+  loadUser = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries:data.entries,
+        joined: data.joined
+      }
+    })
+}
+
   displayFaceBox = (box) => {
     
     this.setState({ box: box });
@@ -94,22 +114,35 @@ class App extends Component {
 
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
       .then(response => response.json())
-    .then(result => this.displayFaceBox(this.calculateFaceLocation(result)))
+      .then(result => this.displayFaceBox(this.calculateFaceLocation(result)))
+      
     .catch(error => console.log('error', error));
-
+ fetch('http://localhost:3000/image', {
+                method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: this.state.user.id
+                
+            })
+       
+          })
+            .then(responses => responses.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, {
+                entries:count 
+              }))
+            })
   
 
   }
   onRouteChange = (data) => {
     if (data === 'signout') {
-      this.setState({ IsSignIn: false })
+      this.setState(initialstate)
     }
     else if (data === 'home') {
       this.setState({IsSignIn:true})
       
     }
-
-
 
     this.setState({route: data});
   }
@@ -125,7 +158,7 @@ class App extends Component {
           (<div>
           
           <Logo />
-          <Rank />
+            <Rank name={ this.state.user.name} entries={this.state.user.entries} />
           <ImageLinkForm
             onInputChange={this.onInputChange}
             onButtonSubmit={this.onButtonSubmit} />
@@ -134,8 +167,8 @@ class App extends Component {
           : (
             this.state.route==='signin'?
        
-              (<Signin onRouteChange={this.onRouteChange} />)
-              :(<Signup onRouteChange={this.onRouteChange}/>)
+              (<Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />)
+              :(<Signup loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>)
                )
            }
       </div>
